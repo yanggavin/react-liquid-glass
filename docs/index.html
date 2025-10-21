@@ -297,24 +297,139 @@
       justify-content: center;
     }
 
-    /* Button Variants */
+    /* Enhanced Button Variants with Multi-layer Glass Effects */
+    .enhanced-glass {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .enhanced-glass::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        rgba(255, 255, 255, 0.1) 35%, 
+        rgba(255, 255, 255, 0) 100%);
+      border-radius: inherit;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .enhanced-glass::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, 
+        rgba(0, 0, 0, 0.15) 0%, 
+        rgba(0, 0, 0, 0.05) 50%, 
+        rgba(0, 0, 0, 0) 100%);
+      border-radius: inherit;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .enhanced-glass > * {
+      position: relative;
+      z-index: 2;
+    }
+
     .primary-btn {
       background: rgba(103, 126, 234, 0.8) !important;
       border: 1px solid rgba(103, 126, 234, 0.9) !important;
+      box-shadow: 0 8px 32px rgba(103, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .primary-btn:hover {
       background: rgba(103, 126, 234, 0.9) !important;
+      box-shadow: 0 12px 40px rgba(103, 126, 234, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
     }
 
     .secondary-btn {
-      background: rgba(255, 255, 255, 0.15) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      background: rgba(142, 142, 147, 0.4) !important;
+      border: 1px solid rgba(142, 142, 147, 0.6) !important;
+      box-shadow: 0 8px 32px rgba(142, 142, 147, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .secondary-btn:hover {
+      background: rgba(142, 142, 147, 0.5) !important;
+      box-shadow: 0 12px 40px rgba(142, 142, 147, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .outline-btn {
-      background: transparent !important;
-      border: 2px solid rgba(255, 255, 255, 0.4) !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 2px solid rgba(255, 255, 255, 0.5) !important;
+      color: white !important;
+      box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .outline-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.7) !important;
+      box-shadow: 0 12px 40px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    /* Button Sizes */
+    .small-btn {
+      height: 40px;
+      padding: 0 16px;
+      font-size: 14px;
+      background: rgba(103, 126, 234, 0.7) !important;
+      border: 1px solid rgba(103, 126, 234, 0.8) !important;
+    }
+
+    .large-btn {
+      height: 56px;
+      padding: 0 32px;
+      font-size: 18px;
+      font-weight: 600;
+      background: rgba(103, 126, 234, 0.8) !important;
+      border: 1px solid rgba(103, 126, 234, 0.9) !important;
+    }
+
+    /* Button States */
+    .loading-btn {
+      background: rgba(103, 126, 234, 0.6) !important;
+      border: 1px solid rgba(103, 126, 234, 0.7) !important;
+      cursor: wait !important;
+    }
+
+    .disabled-btn {
+      background: rgba(142, 142, 147, 0.3) !important;
+      border: 1px solid rgba(142, 142, 147, 0.4) !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      cursor: not-allowed !important;
+      opacity: 0.6 !important;
+    }
+
+    .disabled-btn:hover {
+      background: rgba(142, 142, 147, 0.3) !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 2px solid white;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* Icon Buttons */
@@ -1023,8 +1138,8 @@
     <header class="header-card">
       <h1 class="header-title">React Liquid Glass</h1>
       <p class="header-subtitle">
-        Beautiful glassmorphism components for modern React applications.<br>
-        Create stunning interfaces with liquid glass effects, smooth animations, and Material Design 3 principles.
+        Revolutionary glassmorphism components with multi-layer glass effects for modern React applications.<br>
+        Create stunning interfaces with realistic glass depth, liquid animations, and enhanced visual hierarchy.
       </p>
       
       <div class="github-links">
@@ -1046,16 +1161,53 @@
           
           <!-- Regular Buttons -->
           <div class="component-demo-group">
-            <h4 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 15px; font-size: 1.1rem;">LiquidGlassButton</h4>
+            <h4 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 15px; font-size: 1.1rem;">LiquidGlassButton Variants</h4>
             <div class="demo-buttons-row">
-              <button class="demo-button primary-btn" onclick="showAlert('Primary Button clicked!')">
+              <button class="demo-button primary-btn enhanced-glass" onclick="showAlert('Primary Button clicked!')">
                 Primary
               </button>
-              <button class="demo-button secondary-btn" onclick="showAlert('Secondary Button clicked!')">
+              <button class="demo-button secondary-btn enhanced-glass" onclick="showAlert('Secondary Button clicked!')">
                 Secondary
               </button>
-              <button class="demo-button outline-btn" onclick="showAlert('Outline Button clicked!')">
+              <button class="demo-button outline-btn enhanced-glass" onclick="showAlert('Outline Button clicked!')">
                 Outline
+              </button>
+            </div>
+            
+            <div style="margin: 20px 0; text-align: center;">
+              <span style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">✨ Enhanced with multi-layer glass effects</span>
+            </div>
+          </div>
+
+          <!-- Button Sizes -->
+          <div class="component-demo-group">
+            <h4 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 15px; font-size: 1.1rem;">Button Sizes</h4>
+            <div class="demo-buttons-row" style="align-items: center; gap: 20px;">
+              <button class="demo-button small-btn enhanced-glass" onclick="showAlert('Small button clicked!')">
+                Small
+              </button>
+              <button class="demo-button primary-btn enhanced-glass" onclick="showAlert('Medium button clicked!')">
+                Medium
+              </button>
+              <button class="demo-button large-btn enhanced-glass" onclick="showAlert('Large button clicked!')">
+                Large
+              </button>
+            </div>
+          </div>
+
+          <!-- Button States -->
+          <div class="component-demo-group">
+            <h4 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 15px; font-size: 1.1rem;">Button States</h4>
+            <div class="demo-buttons-row">
+              <button class="demo-button primary-btn enhanced-glass" onclick="showAlert('Active button clicked!')">
+                Active
+              </button>
+              <button class="demo-button loading-btn enhanced-glass" onclick="toggleLoading(this)">
+                <span class="loading-spinner"></span>
+                Loading
+              </button>
+              <button class="demo-button disabled-btn enhanced-glass" disabled>
+                Disabled
               </button>
             </div>
           </div>
@@ -1643,6 +1795,31 @@
       if (panel) {
         panel.classList.remove('show');
         setTimeout(() => panel.remove(), 300);
+      }
+    }
+
+    // Loading button toggle
+    function toggleLoading(button) {
+      const spinner = button.querySelector('.loading-spinner');
+      const isLoading = button.classList.contains('loading-state');
+      
+      if (isLoading) {
+        button.classList.remove('loading-state');
+        spinner.style.display = 'none';
+        button.innerHTML = button.innerHTML.replace('Loading...', 'Loading');
+        button.disabled = false;
+        showAlert('Loading completed!');
+      } else {
+        button.classList.add('loading-state');
+        spinner.style.display = 'inline-block';
+        button.innerHTML = button.innerHTML.replace('Loading', 'Loading...');
+        button.disabled = true;
+        
+        setTimeout(() => {
+          if (button.classList.contains('loading-state')) {
+            toggleLoading(button);
+          }
+        }, 3000);
       }
     }
 
