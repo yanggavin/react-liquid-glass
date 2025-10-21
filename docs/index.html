@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Liquid Glass - Component Demo</title>
+  <meta name="description" content="Beautiful glassmorphism components for React. Interactive demo showcasing buttons, cards, modals, and more with stunning glass effects.">
+  <meta name="keywords" content="React, glassmorphism, UI components, glass effects, modern design">
+  <link rel="canonical" href="https://yanggavin.github.io/react-liquid-glass/">
+  
+  <style>
+    /* Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    /* Demo Container */
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+
+    /* Header Styles */
+    .header-card {
+      text-align: center;
+      padding: 60px 40px;
+      margin-bottom: 60px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: white;
+      margin: 0 0 20px 0;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-subtitle {
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .github-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .github-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .github-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Section Styles */
+    .demo-section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: white;
+      margin: 0 0 30px 0;
+      text-align: center;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    /* Component Cards */
+    .component-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .component-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent);
+    }
+
+    .component-card:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .component-card h3 {
+      color: white;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 15px 0;
+    }
+
+    .component-card p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .component-examples {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .component-examples span {
+      background: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.9);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* Interactive Demo */
+    .interactive-demo {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 40px 0;
+    }
+
+    .demo-button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 15px 30px;
+      color: white;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 10px;
+    }
+
+    .demo-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .demo-container {
+        padding: 16px;
+      }
+      
+      .header-title {
+        font-size: 2.5rem;
+      }
+      
+      .header-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+      
+      .component-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .component-card {
+        padding: 20px;
+      }
+
+      .github-links {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* Animation for demo elements */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Glass effect showcase */
+    .glass-showcase {
+      position: relative;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 30px 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+
+    .glass-showcase::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: rotate 10s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .glass-content {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    
+    <!-- Header -->
+    <header class="header-card">
+      <h1 class="header-title">React Liquid Glass</h1>
+      <p class="header-subtitle">
+        Beautiful glassmorphism components for modern React applications.<br>
+        Create stunning interfaces with liquid glass effects, smooth animations, and Material Design 3 principles.
+      </p>
+      
+      <div class="github-links">
+        <a href="https://github.com/yanggavin/react-liquid-glass" class="github-btn" target="_blank" rel="noopener">
+          <span>⭐</span> View on GitHub
+        </a>
+        <a href="https://www.npmjs.com/package/react-liquid-glass" class="github-btn" target="_blank" rel="noopener">
+          <span>📦</span> Install Package
+        </a>
+      </div>
+    </header>
+
+    <!-- Interactive Demo Section -->
+    <section class="demo-section">
+      <h2 class="section-title">Interactive Preview</h2>
+      <div class="interactive-demo glass-showcase">
+        <div class="glass-content">
+          <h3 style="color: white; margin-bottom: 20px; font-size: 1.3rem;">Try the Glass Effects</h3>
+          <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 25px;">Click these demo buttons to see the glass interactions</p>
+          <div>
+            <button class="demo-button floating" onclick="showAlert('Primary Button')">Primary Button</button>
+            <button class="demo-button" onclick="showAlert('Secondary Button')">Secondary Button</button>
+            <button class="demo-button" onclick="showAlert('Glass Effect!')">Glass Effect</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Components Overview -->
+    <section class="demo-section">
+      <h2 class="section-title">Component Library</h2>
+      <div class="component-grid">
+        
+        <div class="component-card">
+          <h3>🎯 Action Components</h3>
+          <p>Interactive buttons and controls with beautiful glass effects and smooth animations.</p>
+          <div class="component-examples">
+            <span>LiquidGlassButton</span>
+            <span>LiquidGlassFAB</span>
+            <span>IconButton</span>
+            <span>SegmentedButton</span>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <h3>💬 Communication</h3>
+          <p>Feedback components that keep users informed with elegant glass styling.</p>
+          <div class="component-examples">
+            <span>LiquidGlassBadge</span>
+            <span>ProgressIndicator</span>
+            <span>LiquidGlassSnackbar</span>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <h3>✅ Selection Controls</h3>
+          <p>Form controls and input components with glassmorphism effects.</p>
+          <div class="component-examples">
+            <span>LiquidGlassCheckbox</span>
+            <span>LiquidGlassSwitch</span>
+            <span>LiquidGlassChip</span>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <h3>📝 Text Input</h3>
+          <p>Beautiful text fields with glass styling, animations, and icon support.</p>
+          <div class="component-examples">
+            <span>LiquidGlassTextField</span>
+            <span>Icons Support</span>
+            <span>Validation</span>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <h3>📋 Lists & Navigation</h3>
+          <p>Organized content display with interactive glass-styled list items.</p>
+          <div class="component-examples">
+            <span>LiquidGlassList</span>
+            <span>ListItem</span>
+            <span>LiquidGlassMenu</span>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <h3>🎁 Containers</h3>
+          <p>Layout components that organize content with stunning glass effects.</p>
+          <div class="component-examples">
+            <span>LiquidGlassCard</span>
+            <span>LiquidGlassPanel</span>
+            <span>LiquidGlassModal</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="demo-section">
+      <h2 class="section-title">Key Features</h2>
+      <div class="component-grid">
+        <div class="component-card">
+          <h3>🎨 Glassmorphism Design</h3>
+          <p>Modern glass effects with backdrop blur, transparency, and subtle borders that create depth and elegance.</p>
+        </div>
+        
+        <div class="component-card">
+          <h3>📱 Responsive</h3>
+          <p>Components adapt beautifully to any screen size with mobile-first responsive design principles.</p>
+        </div>
+        
+        <div class="component-card">
+          <h3>⚡ TypeScript</h3>
+          <p>Full TypeScript support with comprehensive type definitions for better developer experience.</p>
+        </div>
+        
+        <div class="component-card">
+          <h3>🎭 Customizable</h3>
+          <p>Extensive theming support with CSS variables and props for complete design control.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section class="demo-section">
+      <h2 class="section-title">Getting Started</h2>
+      <div class="glass-showcase">
+        <div class="glass-content">
+          <h3 style="color: white; margin-bottom: 20px;">Quick Start</h3>
+          <div style="text-align: left; background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin: 20px 0;">
+            <code style="color: #a8e6cf; font-family: 'Monaco', monospace; font-size: 14px; line-height: 1.6;">
+              # Install the package<br>
+              npm install react-liquid-glass<br><br>
+              
+              # Import and use<br>
+              import { LiquidGlassButton } from 'react-liquid-glass';<br><br>
+              
+              &lt;LiquidGlassButton title="Get Started" variant="primary" /&gt;
+            </code>
+          </div>
+          <div class="github-links" style="margin-top: 30px;">
+            <a href="https://github.com/yanggavin/react-liquid-glass#readme" class="github-btn" target="_blank" rel="noopener">
+              📚 Documentation
+            </a>
+            <a href="https://github.com/yanggavin/react-liquid-glass/tree/main/examples" class="github-btn" target="_blank" rel="noopener">
+              🎯 Examples
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Made with ❤️ for the React community • <a href="https://github.com/yanggavin" style="color: rgba(255, 255, 255, 0.8);">@yanggavin</a></p>
+      <p style="margin-top: 10px; font-size: 0.8rem;">© 2024 React Liquid Glass • MIT License</p>
+    </footer>
+
+  </div>
+
+  <script>
+    function showAlert(message) {
+      // Create a custom glass alert
+      const alertDiv = document.createElement('div');
+      alertDiv.innerHTML = `
+        <div style="
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: rgba(255, 255, 255, 0.15);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 12px;
+          padding: 16px 24px;
+          color: white;
+          font-weight: 600;
+          z-index: 1000;
+          animation: slideIn 0.3s ease-out;
+        ">${message} clicked! ✨</div>
+      `;
+      
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+      document.body.appendChild(alertDiv);
+      
+      setTimeout(() => {
+        alertDiv.remove();
+        style.remove();
+      }, 3000);
+    }
+
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+      const cards = document.querySelectorAll('.component-card');
+      
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
