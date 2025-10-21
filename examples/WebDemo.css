@@ -1,0 +1,314 @@
+/* WebDemo.css - Styles for the React Liquid Glass demo page */
+
+.web-demo {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.demo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 100px;
+}
+
+/* Header Styles */
+.header-card {
+  text-align: center;
+  padding: 40px 24px;
+  margin-bottom: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 16px 0;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Section Styles */
+.demo-section {
+  margin-bottom: 48px;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 24px 0;
+  padding: 0 8px;
+}
+
+.component-group {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.component-group h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 16px 0;
+}
+
+/* Button Layouts */
+.button-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.icon-button-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Badge Layout */
+.badge-row {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Progress Layout */
+.progress-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.linear-progress {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Selection Layout */
+.selection-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.selection-label {
+  color: white;
+  font-size: 1rem;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+/* Chip Layout */
+.chip-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.demo-card {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.demo-card h3 {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.demo-card p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* List Styles */
+.demo-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 12px;
+}
+
+/* FAB Styles */
+.demo-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+/* Panel Content */
+.panel-content {
+  text-align: center;
+  padding: 24px;
+}
+
+.panel-title {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+}
+
+.panel-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+  max-width: 400px;
+}
+
+/* Modal Content */
+.modal-content {
+  text-align: center;
+  padding: 32px;
+}
+
+.modal-title {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.modal-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+  max-width: 450px;
+}
+
+/* Icon Styles */
+.icon {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  color: inherit;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .web-demo {
+    padding: 16px;
+  }
+  
+  .header-title {
+    font-size: 2rem;
+  }
+  
+  .header-subtitle {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .component-group {
+    padding: 16px;
+  }
+  
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .progress-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .linear-progress {
+    width: 100%;
+  }
+  
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .demo-fab {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .badge-row {
+    gap: 16px;
+  }
+  
+  .icon-button-row {
+    gap: 12px;
+  }
+  
+  .chip-container {
+    justify-content: center;
+  }
+}
+
+/* Animation and Hover Effects */
+.component-group {
+  transition: all 0.3s ease;
+}
+
+.component-group:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Scrollbar Styles */
+.demo-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.demo-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.demo-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.demo-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}

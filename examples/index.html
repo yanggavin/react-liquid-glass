@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Liquid Glass - Component Demo</title>
+  <link rel="stylesheet" href="./WebDemo.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    #root {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Global reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+    
+    /* Ensure smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div class="web-demo">
+      <div class="demo-container">
+        <!-- This will be populated by React -->
+        <div style="text-align: center; color: white; padding: 40px;">
+          <h1>Loading React Liquid Glass Demo...</h1>
+          <p>Please ensure you have React and the liquid glass components properly set up.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- React and ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  
+  <!-- Babel for JSX transformation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Your demo component (this would need to be built/transpiled) -->
+  <script type="text/babel">
+    // This is a placeholder - in a real setup, you'd import the WebDemo component
+    // and render it here using React and ReactDOM
+    
+    const { useState } = React;
+    
+    function SimpleDemo() {
+      return (
+        <div className="web-demo">
+          <div className="demo-container">
+            <div className="header-card">
+              <h1 className="header-title">React Liquid Glass</h1>
+              <p className="header-subtitle">
+                Beautiful glassmorphism components for modern web applications
+              </p>
+            </div>
+            
+            <section className="demo-section">
+              <h2 className="section-title">Component Library Demo</h2>
+              <div className="component-group">
+                <h3>Interactive Demo</h3>
+                <p style={{color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6'}}>
+                  This is a preview of the React Liquid Glass component library. 
+                  The full interactive demo requires building the TypeScript components.
+                  To see all components in action, please build the project and serve 
+                  the WebDemo.tsx component.
+                </p>
+                
+                <div className="button-row" style={{marginTop: '24px'}}>
+                  <button 
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.2)',
+                      border: '1px solid rgba(255, 255, 255, 0.3)',
+                      borderRadius: '12px',
+                      padding: '12px 24px',
+                      color: 'white',
+                      cursor: 'pointer',
+                      backdropFilter: 'blur(10px)',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+                      e.target.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
+                    onClick={() => alert('This is a preview - build the full demo to see all components!')}
+                  >
+                    Preview Button
+                  </button>
+                </div>
+              </div>
+            </section>
+            
+            <section className="demo-section">
+              <h2 className="section-title">Available Components</h2>
+              <div className="cards-grid">
+                <div className="demo-card">
+                  <h3>Action Components</h3>
+                  <p>Buttons, FAB, Icon Buttons, Segmented Buttons with glass effects</p>
+                </div>
+                <div className="demo-card">
+                  <h3>Communication</h3>
+                  <p>Badges, Progress Indicators, Snackbars for user feedback</p>
+                </div>
+                <div className="demo-card">
+                  <h3>Selection</h3>
+                  <p>Checkboxes, Switches, Chips for user input and selection</p>
+                </div>
+                <div className="demo-card">
+                  <h3>Containers</h3>
+                  <p>Cards, Panels, Modals with beautiful glassmorphism effects</p>
+                </div>
+                <div className="demo-card">
+                  <h3>Lists & Menus</h3>
+                  <p>Interactive lists and contextual menus with glass styling</p>
+                </div>
+                <div className="demo-card">
+                  <h3>Text Input</h3>
+                  <p>Glass-styled text fields with animations and icons</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      );
+    }
+    
+    ReactDOM.render(<SimpleDemo />, document.getElementById('root'));
+  </script>
+</body>
+</html>
