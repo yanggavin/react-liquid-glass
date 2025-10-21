@@ -3,16 +3,12 @@ import {
   View,
   TouchableOpacity,
   Animated,
-  PanResponder,
-  Dimensions,
   StyleSheet,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import LinearGradient from 'react-native-linear-gradient';
 import { LiquidGlassCardProps } from '../types';
 import { createGlassStyle, createLiquidGradient, getLiquidAnimationConfig } from '../utils/glassEffects';
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
   children,
@@ -49,17 +45,11 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
     ripplePosition.current = { x: locationX || 50, y: locationY || 50 };
 
     const pressConfig = getLiquidAnimationConfig('press');
-    
-    Animated.parallel([
+    const animations = [
       Animated.spring(scaleAnim, {
         toValue: 0.98,
         ...pressConfig,
       }),
-      liquidEffect ? Animated.timing(liquidAnim, {
-        toValue: 1,
-        duration: animationDuration,
-        useNativeDriver: true,
-      }) : Animated.timing(new Animated.Value(0), { toValue: 0, duration: 0, useNativeDriver: true }),
       Animated.sequence([
         Animated.timing(rippleOpacity, {
           toValue: 0.6,
@@ -72,23 +62,30 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
           useNativeDriver: true,
         }),
       ]),
-    ]).start();
+    ];
+
+    if (liquidEffect) {
+      animations.push(
+        Animated.timing(liquidAnim, {
+          toValue: 1,
+          duration: animationDuration,
+          useNativeDriver: true,
+        })
+      );
+    }
+
+    Animated.parallel(animations).start();
   }, [disabled, liquidEffect, animationDuration, scaleAnim, liquidAnim, rippleAnim, rippleOpacity]);
 
   const handlePressOut = useCallback(() => {
     if (disabled) return;
 
     const releaseConfig = getLiquidAnimationConfig('release');
-    
-    Animated.parallel([
+
+    const animations = [
       Animated.spring(scaleAnim, {
         toValue: 1,
         ...releaseConfig,
-      }),
-      Animated.timing(liquidAnim, {
-        toValue: 0,
-        duration: animationDuration,
-        useNativeDriver: true,
       }),
       Animated.timing(rippleOpacity, {
         toValue: 0,
@@ -100,8 +97,20 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
         duration: animationDuration / 2,
         useNativeDriver: true,
       }),
-    ]).start();
-  }, [disabled, animationDuration, scaleAnim, liquidAnim, rippleOpacity, rippleAnim]);
+    ];
+
+    if (liquidEffect) {
+      animations.push(
+        Animated.timing(liquidAnim, {
+          toValue: 0,
+          duration: animationDuration,
+          useNativeDriver: true,
+        })
+      );
+    }
+
+    Animated.parallel(animations).start();
+  }, [disabled, liquidEffect, animationDuration, scaleAnim, liquidAnim, rippleOpacity, rippleAnim]);
 
   const animatedStyle = {
     transform: [{ scale: scaleAnim }],
