@@ -18,6 +18,8 @@ export const DEFAULT_GLASS_PROPS: Required<GlassEffectProps> = {
 const HEX_COLOR_REGEX = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 const RGBA_COLOR_REGEX = /^rgba?\((\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(\d*\.?\d+))?\)$/i;
 
+const clampChannel = (value: number) => Math.max(0, Math.min(255, Math.round(value)));
+
 const clampOpacity = (value: number) => {
   if (Number.isNaN(value)) {
     return 0;
@@ -47,6 +49,27 @@ const normalizeHex = (hex: string) => {
 
   return null;
 };
+
+const rgbToHex = ({ r, g, b }: { r: number; g: number; b: number }) =>
+  `#${clampChannel(r).toString(16).padStart(2, '0')}${clampChannel(g)
+    .toString(16)
+    .padStart(2, '0')}${clampChannel(b).toString(16).padStart(2, '0')}`;
+
+const mixHexColors = (source: string, target: string, weight: number) => {
+  const w = clampOpacity(weight);
+  const sourceRgb = hexToRgb(source);
+  const targetRgb = hexToRgb(target);
+
+  return rgbToHex({
+    r: sourceRgb.r + (targetRgb.r - sourceRgb.r) * w,
+    g: sourceRgb.g + (targetRgb.g - sourceRgb.g) * w,
+    b: sourceRgb.b + (targetRgb.b - sourceRgb.b) * w,
+  });
+};
+
+const lightenHexColor = (hex: string, amount: number) => mixHexColors(hex, '#ffffff', amount);
+
+const darkenHexColor = (hex: string, amount: number) => mixHexColors(hex, '#000000', amount);
 
 const applyOpacityToColor = (color: string, opacity: number): string => {
   const safeOpacity = clampOpacity(opacity);
@@ -128,17 +151,51 @@ export const createLiquidGradient = (
   baseColor: string,
   intensity: number = 1
 ): GradientConfig => {
-  const alpha = Math.min(intensity * 0.3, 0.8);
-  
+  const alpha = Math.min(intensity * 0.28, 0.85);
+  const highlight = lightenHexColor(baseColor, 0.45);
+  const midtone = lightenHexColor(baseColor, 0.15);
+  const shadow = darkenHexColor(baseColor, 0.35);
+
   return {
     colors: [
-      `${baseColor}${Math.round(alpha * 0.1 * 255).toString(16).padStart(2, '0')}`,
-      `${baseColor}${Math.round(alpha * 0.3 * 255).toString(16).padStart(2, '0')}`,
-      `${baseColor}${Math.round(alpha * 0.1 * 255).toString(16).padStart(2, '0')}`,
+      createRgbaColor(highlight, alpha * 0.65),
+      createRgbaColor(midtone, alpha * 0.85),
+      createRgbaColor(shadow, alpha * 0.55),
     ],
     locations: [0, 0.5, 1],
     start: { x: 0, y: 0 },
     end: { x: 1, y: 1 },
+  };
+};
+
+export const createGlassHighlights = (baseColor: string, intensity: number = 1) => {
+  const clampedIntensity = Math.min(Math.max(intensity, 0.4), 2.5);
+
+  const highlightColor = lightenHexColor(baseColor, 0.75);
+  const surfaceColor = lightenHexColor(baseColor, 0.45);
+  const rimColor = darkenHexColor(baseColor, 0.6);
+
+  return {
+    highlight: {
+      colors: [
+        createRgbaColor(highlightColor, 0.55 * clampedIntensity),
+        createRgbaColor(surfaceColor, 0.1 * clampedIntensity),
+        createRgbaColor(surfaceColor, 0),
+      ],
+      locations: [0, 0.35, 1],
+      start: { x: 0.05, y: 0.05 },
+      end: { x: 0.95, y: 0.95 },
+    } as GradientConfig,
+    edge: {
+      colors: [
+        createRgbaColor(rimColor, 0.25 * clampedIntensity),
+        createRgbaColor(rimColor, 0.05 * clampedIntensity),
+        'rgba(0, 0, 0, 0)',
+      ],
+      locations: [0, 0.5, 1],
+      start: { x: 0.5, y: 1 },
+      end: { x: 0.5, y: 0 },
+    } as GradientConfig,
   };
 };
 
@@ -215,6 +272,17 @@ export const getLiquidAnimationConfig = (type: 'press' | 'release' | 'bounce') =
  * Converts hex color to RGB values
  */
 export const hexToRgb = (hex: string) => {
+  const rgbaMatch = hex.match(RGBA_COLOR_REGEX);
+
+  if (rgbaMatch) {
+    return {
+      r: Math.min(255, parseInt(rgbaMatch[1], 10)),
+      g: Math.min(255, parseInt(rgbaMatch[2], 10)),
+      b: Math.min(255, parseInt(rgbaMatch[3], 10)),
+      a: rgbaMatch[4] ? clampOpacity(parseFloat(rgbaMatch[4])) : 1,
+    };
+  }
+
   const normalized = normalizeHex(hex);
 
   if (!normalized) {

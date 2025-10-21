@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -11,7 +11,7 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import LinearGradient from 'react-native-linear-gradient';
 import { LiquidGlassButtonProps } from '../types';
-import { createGlassStyle, createLiquidGradient, getLiquidAnimationConfig, createRgbaColor } from '../utils/glassEffects';
+import { createGlassStyle, createGlassHighlights, createLiquidGradient, getLiquidAnimationConfig, createRgbaColor } from '../utils/glassEffects';
 
 const SIZE_CONFIGS = {
   small: { height: 40, paddingHorizontal: 16, fontSize: 14 },
@@ -46,11 +46,17 @@ export const LiquidGlassButton: React.FC<LiquidGlassButtonProps> = ({
 
   const sizeConfig = SIZE_CONFIGS[size];
   const baseColor = tintColor || VARIANT_COLORS[variant];
+  const effectiveOpacity = variant === 'outline' ? 0.1 : opacity;
+  const highlightIntensity = Math.min(Math.max(effectiveOpacity * 4.5, 0.7), 2.4);
+  const { highlight: highlightGradient, edge: edgeGradient } = useMemo(
+    () => createGlassHighlights(baseColor, highlightIntensity),
+    [baseColor, highlightIntensity]
+  );
   
   const glassStyle = createGlassStyle({
     blurRadius,
     tintColor: baseColor,
-    opacity: variant === 'outline' ? 0.1 : opacity,
+    opacity: effectiveOpacity,
     borderColor: variant === 'outline' ? createRgbaColor(baseColor, 0.5) : createRgbaColor(baseColor, 0.3),
     borderWidth: variant === 'outline' ? 2 : 1,
     ...glassProps,
@@ -141,6 +147,22 @@ export const LiquidGlassButton: React.FC<LiquidGlassButtonProps> = ({
         blurAmount={blurRadius}
         reducedTransparencyFallbackColor={baseColor}
       />
+      <LinearGradient
+        pointerEvents="none"
+        colors={highlightGradient.colors}
+        locations={highlightGradient.locations}
+        start={highlightGradient.start}
+        end={highlightGradient.end}
+        style={styles.overlay}
+      />
+      <LinearGradient
+        pointerEvents="none"
+        colors={edgeGradient.colors}
+        locations={edgeGradient.locations}
+        start={edgeGradient.start}
+        end={edgeGradient.end}
+        style={styles.overlay}
+      />
       
       <TouchableOpacity
         style={[
@@ -198,6 +220,9 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 12,
     overflow: 'hidden',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
   },
   button: {
     flex: 1,

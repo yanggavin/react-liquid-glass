@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,7 +8,7 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import LinearGradient from 'react-native-linear-gradient';
 import { LiquidGlassCardProps } from '../types';
-import { createGlassStyle, createLiquidGradient, getLiquidAnimationConfig } from '../utils/glassEffects';
+import { createGlassStyle, createGlassHighlights, createLiquidGradient, getLiquidAnimationConfig } from '../utils/glassEffects';
 
 export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
   children,
@@ -37,6 +37,11 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
   });
 
   const liquidGradient = createLiquidGradient(tintColor, 1.2);
+  const highlightIntensity = Math.min(Math.max(opacity * 4, 0.7), 2.2);
+  const { highlight: highlightGradient, edge: edgeGradient } = useMemo(
+    () => createGlassHighlights(tintColor, highlightIntensity),
+    [tintColor, highlightIntensity]
+  );
 
   const handlePressIn = useCallback((event: any) => {
     if (disabled) return;
@@ -154,6 +159,22 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
         blurAmount={blurRadius}
         reducedTransparencyFallbackColor={tintColor}
       />
+      <LinearGradient
+        pointerEvents="none"
+        colors={highlightGradient.colors}
+        locations={highlightGradient.locations}
+        start={highlightGradient.start}
+        end={highlightGradient.end}
+        style={styles.overlay}
+      />
+      <LinearGradient
+        pointerEvents="none"
+        colors={edgeGradient.colors}
+        locations={edgeGradient.locations}
+        start={edgeGradient.start}
+        end={edgeGradient.end}
+        style={styles.overlay}
+      />
       
       <TouchableOpacity
         style={styles.touchable}
@@ -202,6 +223,9 @@ const styles = StyleSheet.create({
   touchable: {
     flex: 1,
     overflow: 'hidden',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
   },
   ripple: {
     position: 'absolute',
