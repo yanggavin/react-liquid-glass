@@ -1,0 +1,204 @@
+import React, { useRef, useCallback } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Animated,
+  PanResponder,
+  Dimensions,
+  StyleSheet,
+} from 'react-native';
+import { BlurView } from '@react-native-community/blur';
+import LinearGradient from 'react-native-linear-gradient';
+import { LiquidGlassCardProps } from '../types';
+import { createGlassStyle, createLiquidGradient, getLiquidAnimationConfig } from '../utils/glassEffects';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
+export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
+  children,
+  style,
+  onPress,
+  disabled = false,
+  liquidEffect = true,
+  animationDuration = 300,
+  blurRadius = 10,
+  tintColor = '#FFFFFF',
+  opacity = 0.15,
+  ...glassProps
+}) => {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const liquidAnim = useRef(new Animated.Value(0)).current;
+  const rippleAnim = useRef(new Animated.Value(0)).current;
+  const rippleOpacity = useRef(new Animated.Value(0)).current;
+
+  const ripplePosition = useRef({ x: 0, y: 0 });
+
+  const glassStyle = createGlassStyle({
+    blurRadius,
+    tintColor,
+    opacity,
+    ...glassProps,
+  });
+
+  const liquidGradient = createLiquidGradient(tintColor, 1.2);
+
+  const handlePressIn = useCallback((event: any) => {
+    if (disabled) return;
+
+    const { locationX, locationY } = event.nativeEvent;
+    ripplePosition.current = { x: locationX || 50, y: locationY || 50 };
+
+    const pressConfig = getLiquidAnimationConfig('press');
+    
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
+        toValue: 0.98,
+        ...pressConfig,
+      }),
+      liquidEffect ? Animated.timing(liquidAnim, {
+        toValue: 1,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }) : Animated.timing(new Animated.Value(0), { toValue: 0, duration: 0, useNativeDriver: true }),
+      Animated.sequence([
+        Animated.timing(rippleOpacity, {
+          toValue: 0.6,
+          duration: 0,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rippleAnim, {
+          toValue: 1,
+          duration: animationDuration * 1.5,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+  }, [disabled, liquidEffect, animationDuration, scaleAnim, liquidAnim, rippleAnim, rippleOpacity]);
+
+  const handlePressOut = useCallback(() => {
+    if (disabled) return;
+
+    const releaseConfig = getLiquidAnimationConfig('release');
+    
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        ...releaseConfig,
+      }),
+      Animated.timing(liquidAnim, {
+        toValue: 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }),
+      Animated.timing(rippleOpacity, {
+        toValue: 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }),
+      Animated.timing(rippleAnim, {
+        toValue: 0,
+        duration: animationDuration / 2,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [disabled, animationDuration, scaleAnim, liquidAnim, rippleOpacity, rippleAnim]);
+
+  const animatedStyle = {
+    transform: [{ scale: scaleAnim }],
+  };
+
+  const rippleStyle = {
+    opacity: rippleOpacity,
+    transform: [
+      {
+        scale: rippleAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 4],
+        }),
+      },
+    ],
+  };
+
+  const liquidOverlayStyle = {
+    opacity: liquidAnim,
+  };
+
+  if (!onPress) {
+    return (
+      <View style={[glassStyle, style]}>
+        <BlurView
+          style={StyleSheet.absoluteFill}
+          blurType="light"
+          blurAmount={blurRadius}
+          reducedTransparencyFallbackColor={tintColor}
+        />
+        {children}
+      </View>
+    );
+  }
+
+  return (
+    <Animated.View style={[animatedStyle, glassStyle, style]}>
+      <BlurView
+        style={StyleSheet.absoluteFill}
+        blurType="light"
+        blurAmount={blurRadius}
+        reducedTransparencyFallbackColor={tintColor}
+      />
+      
+      <TouchableOpacity
+        style={styles.touchable}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}
+        disabled={disabled}
+        activeOpacity={1}
+      >
+        {liquidEffect && (
+          <Animated.View
+            style={[
+              StyleSheet.absoluteFill,
+              liquidOverlayStyle,
+              { borderRadius: glassProps.borderRadius || 16 },
+            ]}
+          >
+            <LinearGradient
+              colors={liquidGradient.colors}
+              locations={liquidGradient.locations}
+              start={liquidGradient.start}
+              end={liquidGradient.end}
+              style={StyleSheet.absoluteFill}
+            />
+          </Animated.View>
+        )}
+        
+        <Animated.View
+          style={[
+            styles.ripple,
+            rippleStyle,
+            {
+              left: ripplePosition.current.x - 25,
+              top: ripplePosition.current.y - 25,
+            },
+          ]}
+        />
+        
+        {children}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
+const styles = StyleSheet.create({
+  touchable: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  ripple: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  },
+});
